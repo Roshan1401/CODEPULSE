@@ -7,8 +7,7 @@ type LanguageDatum = { label: string; hours: number };
 type ChartType = "Donut" | "Bar";
 
 export default function LangChart() {
-
-  const languages : LanguageDatum[] = [
+  const languages: LanguageDatum[] = [
     { label: "JavaScript", hours: 120 },
     { label: "Python", hours: 80 },
     { label: "TypeScript", hours: 60 },
@@ -22,9 +21,7 @@ export default function LangChart() {
     { label: "PHP", hours: 1 },
     { label: "PHP", hours: 1 },
     { label: "PHP", hours: 1 },
-
-
-  ]
+  ];
 
   const getColor = (index: number) => {
     const colors = [
@@ -76,17 +73,17 @@ export default function LangChart() {
         </div>
       </div>
 
-      <div className="flex items-stretch gap-8 px-6 py-4 h-[450px] overflow-hidden">
+      <div className="flex items-stretch gap-8 px-6 py-12 h-112.5 overflow-hidden">
         <div className="flex-1 flex items-center justify-center min-w-0">
           {activeTab === "Donut" ? (
-            <DonutChart  languages={languages} getColor={getColor} />
+            <DonutChart languages={languages} getColor={getColor} />
           ) : (
-            <BarChart2  languages={languages} getColor={getColor} />
+            <BarChart2 languages={languages} getColor={getColor} />
           )}
         </div>
 
         <div className="w-100 shrink-0 h-full overflow-hidden">
-          <LangStateList languages={languages} getColor={getColor}/>
+          <LangStateList languages={languages} getColor={getColor} />
         </div>
       </div>
     </div>
