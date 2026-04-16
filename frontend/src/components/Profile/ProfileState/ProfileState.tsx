@@ -27,10 +27,10 @@ function ProfileState(props: Props) {
         <ProfileStateRow activeTab={activeTab} onTabChange={handleTabChange} />
       </div>
       <div
-        className={`transition-all duration-200 my-10 h-130 flex w-full items-center justify-center ease-out ${
+        className={`my-10 flex h-130 w-full items-center justify-center transition-all duration-200 ease-out ${
           isTransitioning
-            ? "opacity-0 translate-y-2"
-            : "opacity-100 translate-y-0"
+            ? "translate-y-2 opacity-0"
+            : "translate-y-0 opacity-100"
         }`}
       >
         {activeTab === "Lang Chart" ? <LangChart /> : <TopRepo />}

@@ -198,17 +198,17 @@ function Leaderboard() {
 
   return (
     <div className="px-15 py-5">
-      <div className="flex items-center my-3 justify-center">
-        <div className="inline-flex gap-2 items-center rounded-4xl bg-neutral-900 justify-center px-5 py-1 border border-(--color-border)">
+      <div className="my-3 flex items-center justify-center">
+        <div className="inline-flex items-center justify-center gap-2 rounded-4xl border border-(--color-border) bg-neutral-900 px-5 py-1">
           {(["24 Hours", "7 Days", "30 Days"] as const).map((day) => (
             <button
               key={day}
               type="button"
               onClick={() => setActiveRow(day)}
               className={[
-                "rounded-4xl cursor-pointer px-6 py-2 text-md font-bold transition-colors",
+                "text-md cursor-pointer rounded-4xl px-6 py-2 font-bold transition-colors",
                 activeRow === day
-                  ? "text-(--color-text-primary) bg-(--color-bg-primary)"
+                  ? "bg-(--color-bg-primary) text-(--color-text-primary)"
                   : "text-(--color-text-secondary)",
               ].join(" ")}
             >
@@ -218,24 +218,24 @@ function Leaderboard() {
         </div>
       </div>
       <div className="mt-8">
-        <div className="mt-5 rounded-2xl border border-(--color-border) bg-white dark:bg-[#0b0809] overflow-hidden">
+        <div className="mt-5 overflow-hidden rounded-2xl border border-(--color-border) bg-white dark:bg-[#0b0809]">
           <div className="flex justify-end border-b border-(--color-border) px-6 py-4">
             <div className="inline-flex items-center gap-2 rounded-xl border border-(--color-border) bg-(--color-bg-secondary) px-4 py-2">
-              <span className="h-3 w-3 rounded-full bg-orange-500 animate-pulse" />
-              <span className="text-(--color-text-primary) text-sm font-medium">
+              <span className="h-3 w-3 animate-pulse rounded-full bg-orange-500" />
+              <span className="text-sm font-medium text-(--color-text-primary)">
                 Updates every 5 minutes
               </span>
             </div>
           </div>
           <div className="">
-            <div className="grid grid-cols-12 px-6 py-4 gap-4 text-md tracking-wide text-(--color-text-secondary) font-semibold sticky top-0 bg-(--color-bg-secondary) z-10">
+            <div className="text-md sticky top-0 z-10 grid grid-cols-12 gap-4 bg-(--color-bg-secondary) px-6 py-4 font-semibold tracking-wide text-(--color-text-secondary)">
               <div className="col-span-1">Rank</div>
               <div className="col-span-4">Developer</div>
               <div className="col-span-3 text-center">Time Spent</div>
               <div className="col-span-3 text-left">Top Languages</div>
               <div className="col-span-1 text-center">Streak</div>
             </div>
-            <div className="space-y-1 ">
+            <div className="space-y-1">
               {sampleData.map((user) => {
                 const badge = getRankBadge(user.rank);
                 const streakStyle = getStreakColor(user.streak);
@@ -244,30 +244,30 @@ function Leaderboard() {
                     key={user.rank}
                     className="border-t border-(--color-border)"
                   >
-                    <div className="grid grid-cols-12  px-6 gap-4 items-center  py-3  hover:bg-(--color-bg-secondary) transition-colors cursor-pointer">
+                    <div className="grid cursor-pointer grid-cols-12 items-center gap-4 px-6 py-3 transition-colors hover:bg-(--color-bg-secondary)">
                       <div className="col-span-1 flex">
                         <span
-                          className={`w-10 h-10 rounded-lg ${badge.bg} ${badge.text} flex items-center justify-center text-lg font-bold`}
+                          className={`h-10 w-10 rounded-lg ${badge.bg} ${badge.text} flex items-center justify-center text-lg font-bold`}
                         >
                           {user.rank}
                         </span>
                       </div>
-                      <div className="col-span-4  flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-base">
+                      <div className="col-span-4 flex items-center gap-3">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-purple-500 to-pink-500 text-base font-bold text-white">
                           {user.avatar}
                         </div>
-                        <span className="font-semibold text-(--color-text-primary) text-lg">
+                        <span className="text-lg font-semibold text-(--color-text-primary)">
                           {user.name}
                         </span>
                       </div>
-                      <div className="col-span-3 text-center font-mono text-(--color-text-primary) font-semibold text-base">
+                      <div className="col-span-3 text-center font-mono text-base font-semibold text-(--color-text-primary)">
                         {user.timeSpent}
                       </div>
-                      <div className="col-span-3  flex gap-2">
+                      <div className="col-span-3 flex gap-2">
                         {user.languages.map((lang, i) => (
                           <span
                             key={i}
-                            className="px-2.5 py-1 rounded-md text-sm font-medium"
+                            className="rounded-md px-2.5 py-1 text-sm font-medium"
                             style={{
                               backgroundColor: `${lang.color}20`,
                               color: lang.color,
@@ -279,7 +279,7 @@ function Leaderboard() {
                       </div>
                       <div className="col-span-1 flex justify-center">
                         <span
-                          className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-base font-bold ${streakStyle.bg} ${streakStyle.text}`}
+                          className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-base font-bold ${streakStyle.bg} ${streakStyle.text}`}
                         >
                           {user.streak}🔥
                         </span>

@@ -7,7 +7,7 @@ interface BarChartProps {
 
 export default function BarChart2({ languages, getColor }: BarChartProps) {
   return (
-    <div className="w-full h-full">
+    <div className="h-full w-full">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={languages}>
           <Tooltip />

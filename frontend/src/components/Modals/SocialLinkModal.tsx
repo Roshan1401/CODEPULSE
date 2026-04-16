@@ -20,7 +20,7 @@ const platforms = [
     label: "GitHub",
     svg: (
       <svg
-        className="w-5 h-5"
+        className="h-5 w-5"
         stroke="currentColor"
         fill="currentColor"
         strokeWidth="0"
@@ -65,7 +65,7 @@ const platforms = [
     label: "LinkedIn",
     svg: (
       <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
       </svg>
     ),
   },
@@ -74,7 +74,7 @@ const platforms = [
     label: "YouTube",
     svg: (
       <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
       </svg>
     ),
   },
@@ -106,13 +106,15 @@ export function SocialLinkModal({
   onAddLink,
   existingPlatforms,
 }: SocialLinkModalProps) {
-  const [selectedPlatform, setSelectedPlatform] = useState<SocialLink | null>(null);
+  const [selectedPlatform, setSelectedPlatform] = useState<SocialLink | null>(
+    null,
+  );
   const [url, setUrl] = useState("");
 
   if (!isOpen) return null;
 
   const availablePlatforms = platforms.filter(
-    (p) => !existingPlatforms.includes(p.platform)
+    (p) => !existingPlatforms.includes(p.platform),
   );
 
   const handleSubmit = () => {
@@ -131,13 +133,15 @@ export function SocialLinkModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-(--color-bg-primary) rounded-xl p-6 w-[400px] max-w-[90vw] shadow-2xl border border-(--color-border)">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-bold text-(--color-text-primary)">Add Social Link</h2>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+      <div className="w-[400px] max-w-[90vw] rounded-xl border border-(--color-border) bg-(--color-bg-primary) p-6 shadow-2xl">
+        <div className="mb-6 flex items-center justify-between">
+          <h2 className="text-xl font-bold text-(--color-text-primary)">
+            Add Social Link
+          </h2>
           <button
             onClick={handleClose}
-            className="text-gray-500 cursor-pointer rounded-full hover:bg-neutral-200 p-2 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            className="cursor-pointer rounded-full p-2 text-gray-500 hover:bg-neutral-200 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -157,36 +161,48 @@ export function SocialLinkModal({
         </div>
 
         {availablePlatforms.length === 0 ? (
-          <p className="text-center text-gray-500 py-4">All platforms already added!</p>
+          <p className="py-4 text-center text-gray-500">
+            All platforms already added!
+          </p>
         ) : !selectedPlatform ? (
           <div className="grid grid-cols-2 gap-3">
             {availablePlatforms.map((platform) => (
               <button
                 key={platform.platform}
                 onClick={() => setSelectedPlatform(platform as SocialLink)}
-                className="flex items-center gap-3 p-3 rounded-lg cursor-pointer border border-(--color-border-secondary) hover:border-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/20 transition-all"
+                className="flex cursor-pointer items-center gap-3 rounded-lg border border-(--color-border-secondary) p-3 transition-all hover:border-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/20"
               >
                 <div className="text-(--color-text-primary)">
-
-                {platform.svg}
+                  {platform.svg}
                 </div>
-                <span className="font-medium text-(--color-text-primary)">{platform.label}</span>
+                <span className="font-medium text-(--color-text-primary)">
+                  {platform.label}
+                </span>
               </button>
             ))}
           </div>
         ) : (
           <div className="space-y-4">
-            <div className="flex items-center gap-3 p-3 rounded-lg border border-orange-400 bg-orange-50 dark:bg-orange-900/20">
-            <div className="text-(--color-text-primary)">
-
-              {selectedPlatform.svg}
+            <div className="flex items-center gap-3 rounded-lg border border-orange-400 bg-orange-50 p-3 dark:bg-orange-900/20">
+              <div className="text-(--color-text-primary)">
+                {selectedPlatform.svg}
               </div>
-              <span className="font-medium text-(--color-text-primary)">{selectedPlatform.label}</span>
+              <span className="font-medium text-(--color-text-primary)">
+                {selectedPlatform.label}
+              </span>
               <button
                 onClick={() => setSelectedPlatform(null)}
-                className="ml-auto text-gray-500 hover:text-gray-300 cursor-pointer"
+                className="ml-auto cursor-pointer text-gray-500 hover:text-gray-300"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
                   <line x1="18" y1="6" x2="6" y2="18" />
                   <line x1="6" y1="6" x2="18" y2="18" />
                 </svg>
@@ -194,7 +210,7 @@ export function SocialLinkModal({
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-(--color-text-secondary) mb-2">
+              <label className="mb-2 block text-sm font-medium text-(--color-text-secondary)">
                 Enter your {selectedPlatform.label} URL
               </label>
               <input
@@ -202,14 +218,14 @@ export function SocialLinkModal({
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
                 placeholder={`https://${selectedPlatform.platform}.com/username`}
-                className="w-full px-4 py-2 rounded-lg border border-(--color-border-secondary) bg-transparent text-(--color-text-primary) focus:border-orange-400 focus:outline-none"
+                className="w-full rounded-lg border border-(--color-border-secondary) bg-transparent px-4 py-2 text-(--color-text-primary) focus:border-orange-400 focus:outline-none"
               />
             </div>
 
             <button
               onClick={handleSubmit}
               disabled={!url}
-              className="w-full py-2 cursor-pointer px-4 bg-orange-500 text-white font-bold rounded-lg hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+              className="w-full cursor-pointer rounded-lg bg-orange-500 px-4 py-2 font-bold text-white transition-all hover:bg-orange-600 disabled:cursor-not-allowed disabled:opacity-50"
             >
               Add Link
             </button>

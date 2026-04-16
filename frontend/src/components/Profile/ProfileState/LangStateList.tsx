@@ -5,7 +5,7 @@ interface props {
 
 export default function LangStateList({ languages, getColor }: props) {
   return (
-    <div className="flex flex-col overflow-y-auto scrollbar-hide [scrollbar-width:none] gap-4 h-full">
+    <div className="scrollbar-hide flex h-full flex-col gap-4 overflow-y-auto [scrollbar-width:none]">
       {languages.map((lang, index) => (
         <List
           key={index}
@@ -28,22 +28,22 @@ function List({
   color: string;
 }) {
   return (
-    <div className="flex items-center justify-between bg-(--color-bg-primary) border border-(--color-border) rounded-2xl px-5 py-4 gap-2 cursor-pointer transition-colors duration-200 hover:bg-(--color-bg-secondary)">
+    <div className="flex cursor-pointer items-center justify-between gap-2 rounded-2xl border border-(--color-border) bg-(--color-bg-primary) px-5 py-4 transition-colors duration-200 hover:bg-(--color-bg-secondary)">
       <div className="flex items-center gap-4">
         <span
           className="h-5 w-5 rounded-full"
           style={{ backgroundColor: color }}
         />
-        <span className="font-semibold text-xl text-(--color-text-primary)">
+        <span className="text-xl font-semibold text-(--color-text-primary)">
           {language}
         </span>
       </div>
 
-      <div className="flex flex-col ">
-        <span className="font-semibold text-xl text-(--color-text-primary)">
+      <div className="flex flex-col">
+        <span className="text-xl font-semibold text-(--color-text-primary)">
           {hours}
         </span>
-        <span className="font-medium text-sm text-(--color-text-secondary)">
+        <span className="text-sm font-medium text-(--color-text-secondary)">
           50.3%
         </span>
       </div>

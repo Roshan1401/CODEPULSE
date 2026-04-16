@@ -6,7 +6,7 @@ import {
   platforms,
   type SocialLink,
 } from "../Modals/SocialLinkModal";
-import EditModal  from "../Modals/EditModal";
+import EditModal from "../Modals/EditModal";
 
 interface Props {}
 
@@ -25,10 +25,10 @@ function SocialLinkButton({
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="text-(--color-text-primary) shadow-2xl w-fit flex gap-3 items-center px-3 py-1.5 cursor-pointer rounded-lg border border-(--color-border-secondary) hover:border-orange-400 transition-colors"
+      className="flex w-fit cursor-pointer items-center gap-3 rounded-lg border border-(--color-border-secondary) px-3 py-1.5 text-(--color-text-primary) shadow-2xl transition-colors hover:border-orange-400"
     >
       {svg}
-      <span className="font-medium text-md">{label}</span>
+      <span className="text-md font-medium">{label}</span>
     </Component>
   );
 }
@@ -63,31 +63,31 @@ function ProfileHeader(props: Props) {
         onClose={() => setzIsEditModalOpen(false)}
       />
 
-      <div className="relative ">
-        <div className="h-70  bg-black border border-(--color-border) overflow-hidden">
+      <div className="relative">
+        <div className="h-70 overflow-hidden border border-(--color-border) bg-black">
           <img
             src={banner}
-            className="object-cover h-full w-full "
+            className="h-full w-full object-cover"
             alt="Banner"
           />
         </div>
-        <div className="size-50 rounded-full border-2 border-orange-400 dark:border-black  overflow-hidden absolute -bottom-25 left-1/8 hover:scale-105 transition-all duration-200   transform -translate-x-1/2">
+        <div className="absolute -bottom-25 left-1/8 size-50 -translate-x-1/2 transform overflow-hidden rounded-full border-2 border-orange-400 transition-all duration-200 hover:scale-105 dark:border-black">
           <img
             src={profilImg}
-            className="w-full h-full object-cover"
+            className="h-full w-full object-cover"
             alt="Profile"
           />
         </div>
       </div>
-      <div className=" relative pt-32">
-        <div className="px-10 flex flex-col  gap-2">
-          <span className="text-(--color-text-primary) text-4xl font-bold">
+      <div className="relative pt-32">
+        <div className="flex flex-col gap-2 px-10">
+          <span className="text-4xl font-bold text-(--color-text-primary)">
             Roshan Patil
           </span>
-          <span className="text-(--color-text-secondary) text-xl">
+          <span className="text-xl text-(--color-text-secondary)">
             @patilrosha99
           </span>
-          <span className="text-(--color-text-primary) mt-2 text-xl">
+          <span className="mt-2 text-xl text-(--color-text-primary)">
             Learning web dev
           </span>
           <div className="mt-7 flex items-center gap-5">
@@ -102,10 +102,10 @@ function ProfileHeader(props: Props) {
 
             <button
               onClick={() => setIsModalOpen(true)}
-              className="border rounded-full px-2 py-2 cursor-pointer hover:scale-115 transition-all duration-100 text-3xl text-center flex items-center justify-center  border-(--color-border-secondary) hover:border-orange-400 "
+              className="flex cursor-pointer items-center justify-center rounded-full border border-(--color-border-secondary) px-2 py-2 text-center text-3xl transition-all duration-100 hover:scale-115 hover:border-orange-400"
             >
               <svg
-                className="w-6 h-6 text-gray-800 dark:text-white"
+                className="h-6 w-6 text-gray-800 dark:text-white"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -125,7 +125,7 @@ function ProfileHeader(props: Props) {
         <div className="absolute top-29 right-5 p-4">
           <button
             onClick={() => setzIsEditModalOpen(true)}
-            className="text-white bg-orange-500 shadow-2xl w-fit flex gap-3 items-center px-4 py-2 cursor-pointer rounded-lg hover:scale-105 transition-all duration-100  border border-(--color-border-secondary) "
+            className="flex w-fit cursor-pointer items-center gap-3 rounded-lg border border-(--color-border-secondary) bg-orange-500 px-4 py-2 text-white shadow-2xl transition-all duration-100 hover:scale-105"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -141,7 +141,7 @@ function ProfileHeader(props: Props) {
               <path d="m16.475 5.408l2.117 2.117m-.756-3.982L12.109 9.27a2.1 2.1 0 0 0-.58 1.082L11 13l2.648-.53c.41-.082.786-.283 1.082-.579l5.727-5.727a1.853 1.853 0 1 0-2.621-2.621" />
               <path d="M19 15v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h3" />
             </svg>
-            <span className="font-bold text-xl ">Edit</span>
+            <span className="text-xl font-bold">Edit</span>
           </button>
         </div>
       </div>

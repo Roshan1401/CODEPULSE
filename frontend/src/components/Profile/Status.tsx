@@ -9,11 +9,11 @@ interface StatusItemProps {
 
 function StatusItem({ label, value, unit, icon }: StatusItemProps) {
   return (
-    <div className="border px-6 py-5 flex justify-between border-(--color-border-secondary) bg-white dark:bg-[#1b1718]/50 rounded-xl p-3">
-      <div className="flex gap-1 flex-col">
-        <p className="text-(--color-text-secondary) text-xl">{label}</p>
+    <div className="flex justify-between rounded-xl border border-(--color-border-secondary) bg-white p-3 px-6 py-5 dark:bg-[#1b1718]/50">
+      <div className="flex flex-col gap-1">
+        <p className="text-xl text-(--color-text-secondary)">{label}</p>
         <div className="flex gap-1">
-          <span className="text-3xl text-(--color-text-primary) font-bold">
+          <span className="text-3xl font-bold text-(--color-text-primary)">
             {value}
           </span>
           <span className="text-md flex items-end text-(--color-text-secondary)">
@@ -34,7 +34,7 @@ function FlameIcon() {
       viewBox="0 0 24 24"
       strokeWidth="1.5"
       stroke="currentColor"
-      className="text-orange-500 w-5 h-5"
+      className="h-5 w-5 text-orange-500"
       aria-hidden="true"
     >
       <path
@@ -59,7 +59,7 @@ function ClockIcon() {
       viewBox="0 0 24 24"
       strokeWidth="1.5"
       stroke="currentColor"
-      className="text-blue-500 w-5 h-5"
+      className="h-5 w-5 text-blue-500"
       aria-hidden="true"
     >
       <path
@@ -79,7 +79,7 @@ function CodeIcon() {
       viewBox="0 0 24 24"
       strokeWidth="1.5"
       stroke="currentColor"
-      className="text-purple-500 w-5 h-5"
+      className="h-5 w-5 text-purple-500"
       aria-hidden="true"
     >
       <path
@@ -99,7 +99,7 @@ function ChartIcon() {
       viewBox="0 0 24 24"
       strokeWidth="1.5"
       stroke="currentColor"
-      className="text-emerald-500 w-5 h-5"
+      className="h-5 w-5 text-emerald-500"
       aria-hidden="true"
     >
       <path
@@ -113,7 +113,7 @@ function ChartIcon() {
 
 function Status() {
   return (
-    <div className="grid grid-cols-4 px-10 gap-5">
+    <div className="grid grid-cols-4 gap-5 px-10">
       <StatusItem label="Steak" value={4} unit="days" icon={<FlameIcon />} />
       <StatusItem
         label="Total Hours"

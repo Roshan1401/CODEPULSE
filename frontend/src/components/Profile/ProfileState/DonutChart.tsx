@@ -34,7 +34,7 @@ export default function DonutChart({ languages, getColor }: DonutChartProps) {
   };
 
   return (
-    <div className="w-full h-full flex items-center justify-center">
+    <div className="flex h-full w-full items-center justify-center">
       <Doughnut data={data} options={options} />
     </div>
   );

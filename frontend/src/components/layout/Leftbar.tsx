@@ -19,20 +19,16 @@ function Navbar({ onThemeToggle, isDarkTheme = false }: Props) {
   const [activeItem, setActiveItem] = useState("Leaderboard");
 
   return (
-    <div className="flex lg:min-h-screen   ">
-      <div className="fixed border-t  lg:border-t-0 py-2 bottom-0 flex justify-between w-full flex lg:static lg:flex-col lg:w-70 lg:gap-6 lg:border-r border-(--color-border) bg-(--color-bg-primary) ">
-        <div
-          className="
-        hidden lg:flex 
-         px-10 py-8 border-b border-(--color-border)  items-center gap-3 "
-        >
+    <div className="flex lg:min-h-screen">
+      <div className="fixed bottom-0 flex w-full justify-between border-t border-(--color-border) bg-(--color-bg-primary) py-2 lg:static lg:w-70 lg:flex-col lg:gap-6 lg:border-t-0 lg:border-r">
+        <div className="hidden items-center gap-3 border-b border-(--color-border) px-10 py-8 lg:flex">
           <span className="h-3 w-3 rounded-full bg-orange-500" />
           <h1 className="text-2xl font-bold tracking-tight text-(--color-text-primary)">
             Devsteak
           </h1>
         </div>
 
-        <nav className="flex w-full  justify-center md:justify-between md:px-6   lg:flex-col lg:px-8 gap-6  lg:gap-2">
+        <nav className="flex w-full justify-center gap-6 md:justify-between md:px-6 lg:flex-col lg:gap-2 lg:px-8">
           {navItems.map((item) => {
             const isActive = activeItem === item.name;
             const Icon = item.icon;
@@ -43,18 +39,18 @@ function Navbar({ onThemeToggle, isDarkTheme = false }: Props) {
                 type="button"
                 onClick={() => setActiveItem(item.name)}
                 className={[
-                  "flex-col lg:flex-row text-xs gap-2 lg:rounded-md lg:border-b-2 cursor-pointer lg:px-3 lg:py-2 lg:text-xl text-left font-medium transition-colors flex items-center lg:gap-3",
+                  "flex cursor-pointer flex-col items-center gap-2 text-left text-xs font-medium transition-colors lg:flex-row lg:gap-3 lg:rounded-md lg:border-b-2 lg:px-3 lg:py-2 lg:text-xl",
                   isActive
-                    ? "lg:border-orange-500 text-orange-500 lg:bg-orange-500/20 lg:text-(--color-text-primary)"
+                    ? "text-orange-500 lg:border-orange-500 lg:bg-orange-500/20 lg:text-(--color-text-primary)"
                     : "border-transparent text-(--color-text-secondary) hover:bg-orange-500/15 hover:text-(--color-text-primary)",
-                  `${item.name === "Profile" ? "lg:hidden flex" : ""}`,
+                  `${item.name === "Profile" ? "flex lg:hidden" : ""}`,
                 ].join(" ")}
               >
                 <div
                   className={[
-                    "flex items-center justify-center rounded-full  p-2",
+                    "flex items-center justify-center rounded-full p-2 lg:p-0",
                     isActive
-                      ? "dark:bg-orange-900 bg-orange-100 lg:bg-transparent "
+                      ? "bg-orange-200/50 text-orange-500 dark:bg-orange-400/30 dark:lg:bg-transparent"
                       : "",
                   ].join(" ")}
                 >
@@ -66,11 +62,10 @@ function Navbar({ onThemeToggle, isDarkTheme = false }: Props) {
           })}
         </nav>
 
-        <div className="lg:flex lg:flex-col  justify-end flex-1 lg:p-8 gap-4">
+        <div className="flex-1 justify-end gap-4 lg:flex lg:flex-col lg:p-8">
           <div
             onClick={onThemeToggle}
-            className=" fixed rounded-full  right-4 bg-(--color-bg-secondary) top-2 lg:static
-            lg:rounded-md lg:flex lg:justify-between p-2 cursor-pointer border border-(--color-border-secondary) text-orange-500 transition-colors hover:bg-orange-500/10"
+            className="fixed top-2 right-4 cursor-pointer rounded-full border border-(--color-border-secondary) bg-(--color-bg-secondary) p-2 text-orange-500 transition-colors hover:bg-orange-500/10 lg:static lg:flex lg:justify-between lg:rounded-md"
           >
             {isDarkTheme ? (
               <svg
@@ -92,14 +87,14 @@ function Navbar({ onThemeToggle, isDarkTheme = false }: Props) {
               </svg>
             )}
             <button
-              className={`w-9 h-5 hidden lg:block  flex items-center cursor-pointer relative rounded-4xl ${isDarkTheme ? "bg-orange-500" : "bg-gray-400"}`}
+              className={`relative hidden h-5 w-9 cursor-pointer items-center rounded-4xl lg:block ${isDarkTheme ? "bg-orange-500" : "bg-gray-400"}`}
             >
               <div
-                className={`size-5 border border-(--color-border) transition-all duration-300  absolute left-0 top-0 bg-white rounded-full ${isDarkTheme ? "left-4  border-0" : "left-0"}`}
+                className={`absolute top-0 left-0 size-5 rounded-full border border-(--color-border) bg-white transition-all duration-300 ${isDarkTheme ? "left-4 border-0" : "left-0"}`}
               ></div>
             </button>
           </div>
-          <button className="lg:flex hidden cursor-pointer items-center justify-center gap-2 rounded-md border border-orange-500/30 bg-(--color-bg-primary) px-3 py-2 text-sm text-orange-500 font-bold  transition-colors hover:border-orange-500/60  active:border-orange-500 active:bg-orange-500/20 active:text-orange-100">
+          <button className="hidden cursor-pointer items-center justify-center gap-2 rounded-md border border-orange-500/30 bg-(--color-bg-primary) px-3 py-2 text-sm font-bold text-orange-500 transition-colors hover:border-orange-500/60 active:border-orange-500 active:bg-orange-500/20 active:text-orange-100 lg:flex">
             <svg
               className="h-5 w-5"
               fill="currentColor"

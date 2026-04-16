@@ -6,28 +6,28 @@ function Rightbar(props: Props) {
   const {} = props;
 
   return (
-    <div className="flex flex-col min-h-screen gap-6 border-l border-(--color-border) bg-(--color-bg-primary) py-6 px-7">
+    <div className="flex min-h-screen flex-col gap-6 border-l border-(--color-border) bg-(--color-bg-primary) px-7 py-6">
       <div className="flex flex-col items-center justify-center gap-4">
-        <div className="size-30 rounded-full border border-orange-400 dark:border-black  overflow-hidden">
+        <div className="size-30 overflow-hidden rounded-full border border-orange-400 dark:border-black">
           <img
             src={profilImg}
-            className="w-full h-full object-cover"
+            className="h-full w-full object-cover"
             alt="Profile"
           />
         </div>
         <div className="flex flex-col items-center gap-1">
-          <span className="text-(--color-text-primary) text-2xl font-semibold">
+          <span className="text-2xl font-semibold text-(--color-text-primary)">
             Roshan Patil
           </span>
-          <span className="text-(--color-text-secondary) text-md">
+          <span className="text-md text-(--color-text-secondary)">
             @patilrosha99
           </span>
-          <span className="text-(--color-text-secondary) text-lg mt-2">
+          <span className="mt-2 text-lg text-(--color-text-secondary)">
             Learning React
           </span>
         </div>
 
-        <button className="px-4 py-2 shadow-2xl flex items-center justify-center gap-3 w-full rounded-lg cursor-pointer hover:bg-orange-400 hover:scale-102 transition-all duration-200 bg-orange-500 text-white text-xl font-semibold">
+        <button className="flex w-full cursor-pointer items-center justify-center gap-3 rounded-lg bg-orange-500 px-4 py-2 text-xl font-semibold text-white shadow-2xl transition-all duration-200 hover:scale-102 hover:bg-orange-400">
           <span>View Profile</span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -40,52 +40,52 @@ function Rightbar(props: Props) {
         </button>
       </div>
 
-      <div className="flex flex-col  gap-3">
-        <h3 className="text-(--color-text-secondary) text-xs font-semibold uppercase tracking-wider">
+      <div className="flex flex-col gap-3">
+        <h3 className="text-xs font-semibold tracking-wider text-(--color-text-secondary) uppercase">
           Today's Activity
         </h3>
         <div className="grid grid-cols-2 gap-3">
-          <div className="rounded-md size-30 hover:border-orange-400 border border-(--color-border) bg-(--color-bg-secondary) p-2">
-            <div className="text-xs text-(--color-text-secondary) uppercase tracking-wider">
+          <div className="size-30 rounded-md border border-(--color-border) bg-(--color-bg-secondary) p-2 hover:border-orange-400">
+            <div className="text-xs tracking-wider text-(--color-text-secondary) uppercase">
               Rank
             </div>
-            <div className="text-2xl font-bold text-(--color-text-primary) mt-2">
+            <div className="mt-2 text-2xl font-bold text-(--color-text-primary)">
               —
             </div>
-            <div className="text-xs text-(--color-text-secondary) mt-1">
+            <div className="mt-1 text-xs text-(--color-text-secondary)">
               Past 24h leaderboard
             </div>
           </div>
-          <div className="rounded-md hover:border-orange-400 border border-(--color-border-secondary) bg-(--color-bg-secondary) p-3">
-            <div className="text-xs text-(--color-text-secondary) uppercase tracking-wider">
+          <div className="rounded-md border border-(--color-border-secondary) bg-(--color-bg-secondary) p-3 hover:border-orange-400">
+            <div className="text-xs tracking-wider text-(--color-text-secondary) uppercase">
               Streak
             </div>
-            <div className="text-2xl font-bold text-(--color-text-primary) mt-2">
+            <div className="mt-2 text-2xl font-bold text-(--color-text-primary)">
               0 days
             </div>
-            <div className="text-xs text-(--color-text-secondary) mt-1">
+            <div className="mt-1 text-xs text-(--color-text-secondary)">
               Current streak
             </div>
           </div>
-          <div className="rounded-md hover:border-orange-400 border border-(--color-border-secondary) bg-(--color-bg-secondary) p-3">
-            <div className="text-xs text-(--color-text-secondary) uppercase tracking-wider">
+          <div className="rounded-md border border-(--color-border-secondary) bg-(--color-bg-secondary) p-3 hover:border-orange-400">
+            <div className="text-xs tracking-wider text-(--color-text-secondary) uppercase">
               Hours
             </div>
-            <div className="text-2xl font-bold text-(--color-text-primary) mt-2">
+            <div className="mt-2 text-2xl font-bold text-(--color-text-primary)">
               0m
             </div>
-            <div className="text-xs text-(--color-text-secondary) mt-1">
+            <div className="mt-1 text-xs text-(--color-text-secondary)">
               Past 24h
             </div>
           </div>
-          <div className="rounded-md hover:border-orange-400 border border-(--color-border-secondary) bg-(--color-bg-secondary) p-3">
-            <div className="text-xs text-(--color-text-secondary) uppercase tracking-wider">
+          <div className="rounded-md border border-(--color-border-secondary) bg-(--color-bg-secondary) p-3 hover:border-orange-400">
+            <div className="text-xs tracking-wider text-(--color-text-secondary) uppercase">
               Lines
             </div>
-            <div className="text-2xl font-bold text-(--color-text-primary) mt-2">
+            <div className="mt-2 text-2xl font-bold text-(--color-text-primary)">
               0
             </div>
-            <div className="text-xs text-(--color-text-secondary) mt-1">
+            <div className="mt-1 text-xs text-(--color-text-secondary)">
               Past 24h
             </div>
           </div>
@@ -109,7 +109,7 @@ function Rightbar(props: Props) {
           <div className="flex items-start justify-between gap-2">
             <div className="flex items-start gap-2">
               <svg
-                className="h-5 w-5 text-orange-500 mt-0.5"
+                className="mt-0.5 h-5 w-5 text-orange-500"
                 fill="currentColor"
                 viewBox="0 0 24 24"
                 aria-hidden="true"
@@ -129,16 +129,16 @@ function Rightbar(props: Props) {
               Inactive
             </span>
           </div>
-          <button className="w-full mt-3 cursor-pointer rounded-md border border-(--color-border) bg-(--color-bg-primary) px-3 py-2 text-sm font-medium text-(--color-text-primary) transition-colors hover:border-orange-500/50  active:border-orange-500 active:bg-orange-500/20 active:text-orange-500">
+          <button className="mt-3 w-full cursor-pointer rounded-md border border-(--color-border) bg-(--color-bg-primary) px-3 py-2 text-sm font-medium text-(--color-text-primary) transition-colors hover:border-orange-500/50 active:border-orange-500 active:bg-orange-500/20 active:text-orange-500">
             Test connection
           </button>
         </div>
 
-        <button className="flex  cursor-pointer items-center justify-center gap-2 rounded-md border border-orange-500/30 bg-(--color-bg-primary) px-3 py-2 text-sm text-orange-500 font-bold  transition-colors hover:border-orange-500/60  active:border-orange-500 active:bg-orange-500/20 active:text-orange-100">
+        <button className="flex cursor-pointer items-center justify-center gap-2 rounded-md border border-orange-500/30 bg-(--color-bg-primary) px-3 py-2 text-sm font-bold text-orange-500 transition-colors hover:border-orange-500/60 active:border-orange-500 active:bg-orange-500/20 active:text-orange-100">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
-            className="h-5 w-5 "
+            className="h-5 w-5"
             fill="none"
             stroke="currentColor"
             stroke-width="2"

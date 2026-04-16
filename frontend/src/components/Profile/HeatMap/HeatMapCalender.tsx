@@ -73,29 +73,29 @@ function HeatMapCalender(props: Props) {
   const weeks = getWeeks();
 
   return (
-    <div className="bg-(--color-surface)  border border-(--color-border) rounded-xl  my-4">
-      <div className="flex justify-between items-center p-6 flex-wrap gap-3">
-        <h3 className="text-base font-semibold text-(--color-text-primary) m-0">
+    <div className="my-4 rounded-xl border border-(--color-border) bg-(--color-surface)">
+      <div className="flex flex-wrap items-center justify-between gap-3 p-6">
+        <h3 className="m-0 text-base font-semibold text-(--color-text-primary)">
           Contribution Activity
         </h3>
         <div className="flex items-center gap-1 text-xs text-(--color-text-secondary)">
           <span className="mx-1">Less</span>
-          <div className="w-3 h-3 rounded-sm bg-[#f3f4f6] dark:bg-[#1f2937]"></div>
-          <div className="w-3 h-3 rounded-sm bg-[#fed7aa] dark:bg-[#7c2d12]"></div>
-          <div className="w-3 h-3 rounded-sm bg-[#fdba74] dark:bg-[#9a3412]"></div>
-          <div className="w-3 h-3 rounded-sm bg-[#fb923c] dark:bg-[#c2410c]"></div>
-          <div className="w-3 h-3 rounded-sm bg-[#f97316] dark:bg-[#ea580c]"></div>
+          <div className="h-3 w-3 rounded-sm bg-[#f3f4f6] dark:bg-[#1f2937]"></div>
+          <div className="h-3 w-3 rounded-sm bg-[#fed7aa] dark:bg-[#7c2d12]"></div>
+          <div className="h-3 w-3 rounded-sm bg-[#fdba74] dark:bg-[#9a3412]"></div>
+          <div className="h-3 w-3 rounded-sm bg-[#fb923c] dark:bg-[#c2410c]"></div>
+          <div className="h-3 w-3 rounded-sm bg-[#f97316] dark:bg-[#ea580c]"></div>
           <span className="mx-1">More</span>
         </div>
       </div>
 
       <div className="p-6 pt-0">
-        <div className="flex items-start ">
-          <div className="felx flex-col gap-2 mr-3">
+        <div className="flex items-start">
+          <div className="felx mr-3 flex-col gap-2">
             {dayLabels.map((label) => (
               <div
                 key={label}
-                className="h-13 flex items-center text-sm text-(--color-text-secondary) font-semibold"
+                className="flex h-13 items-center text-sm font-semibold text-(--color-text-secondary)"
               >
                 {label}
               </div>
@@ -104,22 +104,22 @@ function HeatMapCalender(props: Props) {
 
           <div
             ref={gridScrollRef}
-            className="flex gap-1 py-1 flex-row overflow-hidden scroll-p-2.5 px-1"
+            className="flex scroll-p-2.5 flex-row gap-1 overflow-hidden px-1 py-1"
           >
-            <div className="grid grid-flow-col auto-cols-max gap-2 ">
+            <div className="grid auto-cols-max grid-flow-col gap-2">
               {weeks.map((week, weekIndex) => (
-                <div key={weekIndex} className="flex flex-col  gap-1">
+                <div key={weekIndex} className="flex flex-col gap-1">
                   {week.map((day, dayIndex) => {
                     const intensity = getIntensity(day.hours);
                     const color = getColor(intensity);
                     return (
-                      <div className="relative group">
+                      <div className="group relative">
                         <div
                           key={dayIndex}
-                          className="w-10 h-10 rounded-md cursor-pointer m-1 border border-(--color-border-secondary) transition-transform hover:scale-110"
+                          className="m-1 h-10 w-10 cursor-pointer rounded-md border border-(--color-border-secondary) transition-transform hover:scale-110"
                           style={{ backgroundColor: color }}
                         />
-                        <div className="hidden group-hover:flex group-hover:flex-col font-semibold absolute z-1000 top-5 -left-26 border border-(--color-border-secondary) o bg-(--color-bg-primary) text-(--color-text-primary) text-ms rounded-md p-2 whitespace-nowrap">
+                        <div className="o text-ms absolute top-5 -left-26 z-1000 hidden rounded-md border border-(--color-border-secondary) bg-(--color-bg-primary) p-2 font-semibold whitespace-nowrap text-(--color-text-primary) group-hover:flex group-hover:flex-col">
                           <span>{day.date}</span>
                           <span>{day.hours} hour</span>
                         </div>
