@@ -88,8 +88,8 @@ function Navbar({ onThemeToggle, isDarkTheme = false }: Props) {
             </svg>
             <span>Sign In</span>
           </button> */}
-          <div className="flex items-center  border border-(--color-border-secondary) hover:border-orange-500 gap-5 hover:bg-(--color-bg-secondary) cursor-pointer rounded-full p-2">
-          <div className="size-12 rounded-full border border-orange-400 dark:border-black  overflow-hidden">
+          <div className="flex items-center  border border-(--color-border-secondary) dark:border-black hover:border-orange-500 gap-5 hover:bg-(--color-bg-secondary) cursor-pointer rounded-full p-2">
+          <div className="size-12 rounded-full  dark:border-black  overflow-hidden">
           <img
             src={profilImg}
             className="w-full h-full object-cover"
