@@ -1,0 +1,6 @@
+{
+  "routes": ["/leaderboard", "/explore", "/profile", "/rank"],
+  "breakpoints": [375, 768, 1280],
+  "out": "./src/bones",
+  "animate": "shimmer"
+}

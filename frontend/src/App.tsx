@@ -4,54 +4,18 @@ import Leftbar from "./components/layout/Leftbar";
 import Rightbar from "./components/layout/Rightbar/Rightbar";
 import { Outlet } from "react-router-dom";
 import useUserStore from "./store/useUserStore";
-import { supabase } from "./components/supabase";
+import "./bones/registry";
 
 function App() {
   const [theme, setTheme] = useState<boolean>(() => {
     return localStorage.getItem("theme") === "dark";
   });
 
-  const setUser = useUserStore((state) => state.setUser);
-  const loading = useUserStore((state) => state.loading);
-  const setLoading = useUserStore((state) => state.setLoading);
+  const initialize = useUserStore((state) => state.initialize);
 
   useEffect(() => {
-    let isMounted = true;
-
-    const handleSession = async () => {
-      try {
-        const {
-          data: { session },
-        } = await supabase.auth.getSession();
-        if (!isMounted) return;
-
-        const user = session?.user ?? null;
-        setUser(user);
-
-        if (user) {
-          setLoading(false);
-        }
-      } catch (error) {
-        console.error("Error fetching session:", error);
-      } finally {
-      }
-    };
-
-    handleSession();
-
-    const { data: listener } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        const user = session?.user ?? null;
-
-        setUser(user);
-      },
-    );
-
-    return () => {
-      isMounted = false;
-      listener.subscription.unsubscribe();
-    };
-  }, []);
+    initialize();
+  }, [initialize]);
 
   function toggleTheme() {
     setTheme((prev) => !prev);

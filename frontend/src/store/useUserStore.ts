@@ -1,12 +1,14 @@
 import { create } from "zustand";
 import type { User as supabaseUser } from "@supabase/supabase-js";
+import { supabase } from "../lib/supabase";
 
 interface UserState {
   user: supabaseUser | null;
   loading: boolean;
   setUser: (user: supabaseUser | null) => void;
   setLoading: (loading: boolean) => void;
-  logOut: () => void;
+  initialize: () => Promise<void>;
+  logOut: () => Promise<void>;
 }
 
 const useUserStore = create<UserState>((set) => ({
@@ -14,7 +16,19 @@ const useUserStore = create<UserState>((set) => ({
   loading: true,
   setUser: (user) => set({ user }),
   setLoading: (loading) => set({ loading }),
-  logOut: () => set({ user: null }),
+  initialize: async () => {
+    set({ loading: true });
+    const { data } = await supabase.auth.getSession();
+    set({ user: data.session?.user ?? null, loading: false });
+
+    supabase.auth.onAuthStateChange((_event, session) => {
+      set({ user: session?.user ?? null, loading: false });
+    });
+  },
+  logOut: async () => {
+    await supabase.auth.signOut();
+    set({ user: null });
+  },
 }));
 
 export default useUserStore;

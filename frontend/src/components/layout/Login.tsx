@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { GithubIcon, TwitterIcon } from "../../assets/Icons";
-import { supabase } from "../supabase.ts";
+import { supabase } from "../../lib/supabase.ts";
 
 const Login = () => {
   const [blink, setBlink] = useState(true);
@@ -17,14 +17,28 @@ const Login = () => {
     setStatus(provider);
     console.log(`Initiating login with ${provider}...`);
     try {
-      await supabase.auth.signInWithOAuth({
+      const { data, error } = await supabase.auth.signInWithOAuth({
         provider: provider,
         options: {
           redirectTo: `${window.location.origin}/leaderboard`,
         },
       });
+
+      if (error) {
+        console.error("OAuth error:", error.message);
+        setStatus(null);
+        return;
+      }
+
+      if (data?.url) {
+        console.log("Redirecting to:", data.url);
+        window.location.href = data.url;
+      } else {
+        console.log("No redirect URL returned");
+      }
     } catch (error) {
-      throw error;
+      console.error("OAuth exception:", error);
+      setStatus(null);
     }
   };
 

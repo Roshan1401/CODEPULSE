@@ -1,0 +1,48 @@
+{
+  "breakpoints": {
+    "375": {
+      "name": "right-bar",
+      "viewportWidth": 0,
+      "width": 0,
+      "height": 0,
+      "bones": []
+    },
+    "768": {
+      "name": "right-bar",
+      "viewportWidth": 0,
+      "width": 0,
+      "height": 0,
+      "bones": []
+    },
+    "1280": {
+      "name": "right-bar",
+      "viewportWidth": 300,
+      "width": 300,
+      "height": 900,
+      "bones": [
+        [
+          0,
+          0,
+          100,
+          900,
+          8,
+          true
+        ],
+        [
+          9.6667,
+          84,
+          81,
+          40,
+          8
+        ],
+        [
+          9.6667,
+          144,
+          81,
+          36,
+          8
+        ]
+      ]
+    }
+  }
+}
