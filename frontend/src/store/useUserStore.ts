@@ -20,7 +20,7 @@ const useUserStore = create<UserState>((set) => ({
     set({ loading: true });
 
     const { data } = await supabase.auth.getSession();
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     const user = data.session?.user ?? null;
 
