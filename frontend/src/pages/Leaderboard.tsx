@@ -1,195 +1,42 @@
 import { GithubIcon } from "../assets/Icons";
 import LeaderboardRow from "../components/leaderboard/LeaderboardRow";
-import profileimg from "../assets/image.png";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MedalIcon } from "../assets/Icons/index";
+import { fetchLeaderboard } from "../queries/fetchLeaderboard";
+import { getLanguageColor } from "../queries/languageColor";
 
 interface LeaderboardUser {
   rank: number;
   name: string;
-  avatar: string;
+  username: string;
+  avatar_url: string;
   timeSpent: string;
-  streak: number;
-  languages: { name: string; color: string }[];
+  byLanguage: {
+    language: string;
+    hours: string;
+  }[];
 }
 
-const sampleData: LeaderboardUser[] = [
-  {
-    rank: 1,
-    name: "Sarah Chen",
-    avatar: profileimg,
-    timeSpent: "32h:10m",
-    streak: 15,
-    languages: [
-      { name: "TypeScript", color: "#3178c6" },
-      { name: "Rust", color: "#dea584" },
-    ],
-  },
-  {
-    rank: 2,
-    name: "Alex Rivera",
-    avatar: profileimg,
-    timeSpent: "26h:15m",
-    streak: 8,
-    languages: [
-      { name: "Python", color: "#3572A5" },
-      { name: "Go", color: "#00ADD8" },
-      { name: "Go", color: "#00ADD8" },
-    ],
-  },
-  {
-    rank: 3,
-    name: "Jordan Kim",
-    avatar: profileimg,
-    timeSpent: "23h:20m",
-    streak: 21,
-    languages: [
-      { name: "JavaScript", color: "#f1e05a" },
-      { name: "React", color: "#61dafb" },
-    ],
-  },
-  {
-    rank: 4,
-    name: "Taylor Swift",
-    avatar: profileimg,
-    timeSpent: "20h 45m",
-    streak: 5,
-    languages: [
-      { name: "Swift", color: "#F05138" },
-      { name: "Kotlin", color: "#A97BFF" },
-    ],
-  },
-  {
-    rank: 5,
-    name: "Morgan Lee",
-    avatar: profileimg,
-    timeSpent: "17h 30m",
-    streak: 12,
-    languages: [
-      { name: "Java", color: "#b07219" },
-      { name: "C++", color: "#f34b7d" },
-    ],
-  },
-  {
-    rank: 5,
-    name: "Morgan Lee",
-    avatar: profileimg,
-    timeSpent: "17h 30m",
-    streak: 12,
-    languages: [
-      { name: "Java", color: "#b07219" },
-      { name: "C++", color: "#f34b7d" },
-    ],
-  },
-  {
-    rank: 5,
-    name: "Morgan Lee",
-    avatar: profileimg,
-    timeSpent: "17h 30m",
-    streak: 12,
-    languages: [
-      { name: "Java", color: "#b07219" },
-      { name: "C++", color: "#f34b7d" },
-    ],
-  },
-  {
-    rank: 5,
-    name: "Morgan Lee",
-    avatar: profileimg,
-    timeSpent: "17h 30m",
-    streak: 12,
-    languages: [
-      { name: "Java", color: "#b07219" },
-      { name: "C++", color: "#f34b7d" },
-    ],
-  },
-  {
-    rank: 5,
-    name: "Morgan Lee",
-    avatar: profileimg,
-    timeSpent: "17h 30m",
-    streak: 12,
-    languages: [
-      { name: "Java", color: "#b07219" },
-      { name: "C++", color: "#f34b7d" },
-    ],
-  },
-  {
-    rank: 5,
-    name: "Morgan Lee",
-    avatar: profileimg,
-    timeSpent: "17h 30m",
-    streak: 12,
-    languages: [
-      { name: "Java", color: "#b07219" },
-      { name: "C++", color: "#f34b7d" },
-    ],
-  },
-  {
-    rank: 5,
-    name: "Morgan Lee",
-    avatar: profileimg,
-    timeSpent: "17h 30m",
-    streak: 12,
-    languages: [
-      { name: "Java", color: "#b07219" },
-      { name: "C++", color: "#f34b7d" },
-    ],
-  },
-  {
-    rank: 5,
-    name: "Morgan Lee",
-    avatar: profileimg,
-    timeSpent: "17h 30m",
-    streak: 12,
-    languages: [
-      { name: "Java", color: "#b07219" },
-      { name: "C++", color: "#f34b7d" },
-    ],
-  },
-  {
-    rank: 5,
-    name: "Morgan dfgdgfLee",
-    avatar: profileimg,
-    timeSpent: "17h 30m",
-    streak: 12,
-    languages: [
-      { name: "Java", color: "#b07219" },
-      { name: "C++", color: "#f34b7d" },
-    ],
-  },
-  {
-    rank: 5,
-    name: "Morgan Lee",
-    avatar: profileimg,
-    timeSpent: "17h:30m",
-    streak: 12,
-    languages: [
-      { name: "Java", color: "#b07219" },
-      { name: "C++", color: "#f34b7d" },
-    ],
-  },
-  {
-    rank: 5,
-    name: "Morgan fgdfgdfsgsdfgLee",
-    avatar: profileimg,
-    timeSpent: "17h 30m",
-    streak: 12,
-    languages: [
-      { name: "Java", color: "#b07219" },
-      { name: "C++", color: "#f34b7d" },
-    ],
-  },
-];
+type range = "24h" | "7day" | "30day";
 
 function Leaderboard() {
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
+  const [activeRow, setActiveRow] = useState<string>("24h");
+  const [leaderboardData, setLeaderboardData] = useState<LeaderboardUser[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await fetchLeaderboard(activeRow as range);
+      setLeaderboardData(data);
+    };
+    fetchData();
+  }, [activeRow]);
 
   return (
     <div className="px-5 py-5 xl:px-15">
       <div className="my-3 flex items-center justify-center">
-        <LeaderboardRow />
+        <LeaderboardRow activeRow={activeRow} setActiveRow={setActiveRow} />
       </div>
       <div className="mt-8">
         <div className="mt-5 overflow-hidden rounded-2xl border border-(--color-border) bg-white dark:bg-[#0b0809]">
@@ -209,7 +56,7 @@ function Leaderboard() {
               <div className="col-span-4 text-right">Top Languages</div>
             </div>
             <div className="space-y-1">
-              {sampleData.map((user, index) => {
+              {leaderboardData.map((user: LeaderboardUser, index: number) => {
                 return (
                   <div
                     key={index}
@@ -240,7 +87,7 @@ function Leaderboard() {
                       <div className="col-span-4 flex items-center gap-3">
                         <div className="size-8 overflow-hidden rounded-full transition-all duration-75 ease-out hover:scale-103 md:size-11 dark:border-black">
                           <img
-                            src={user.avatar}
+                            src={user.avatar_url}
                             className="h-full w-full object-cover"
                             alt="Profile"
                           />
@@ -274,16 +121,16 @@ function Leaderboard() {
                       </button>
 
                       <div className="hidden justify-end gap-2 md:col-span-4 md:flex">
-                        {user.languages.map((lang, i) => (
+                        {user.byLanguage.map((lang, i) => (
                           <span
                             key={i}
                             className="rounded-md px-2.5 py-1 text-sm font-medium"
                             style={{
-                              backgroundColor: `${lang.color}20`,
-                              color: lang.color,
+                              backgroundColor: `${getLanguageColor(lang.language)}20`,
+                              color: getLanguageColor(lang.language),
                             }}
                           >
-                            {lang.name}
+                            {lang.language}
                           </span>
                         ))}
                       </div>
@@ -306,16 +153,16 @@ function Leaderboard() {
                           Top Languages
                         </div>
                         <div className="flex flex-wrap gap-2">
-                          {user.languages.map((lang, i) => (
+                          {user.byLanguage.map((lang, i) => (
                             <span
                               key={i}
                               className="rounded-md px-2.5 py-1 text-xs font-medium"
                               style={{
-                                backgroundColor: `${lang.color}20`,
-                                color: lang.color,
+                                backgroundColor: `${getLanguageColor(lang.language)}20`,
+                                color: getLanguageColor(lang.language),
                               }}
                             >
-                              {lang.name}
+                              {lang.language}
                             </span>
                           ))}
                         </div>

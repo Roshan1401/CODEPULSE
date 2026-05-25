@@ -1,12 +1,14 @@
 import { useState } from "react";
 
-interface Props {}
-type LeaderboardRow = "24 Hours" | "7 Days" | "30 Days";
+interface Props {
+  activeRow: string;
+  setActiveRow: (row: string) => void;
+}
+type LeaderboardRow = "24h" | "7day" | "30day";
 
 function LeaderboardRow(props: Props) {
-  const {} = props;
-  const days: LeaderboardRow[] = ["24 Hours", "7 Days", "30 Days"];
-  const [activeRow, setActiveRow] = useState<LeaderboardRow>("24 Hours");
+  const { activeRow, setActiveRow } = props;
+  const days: LeaderboardRow[] = ["24h", "7day", "30day"];
 
   return (
     <div className="inline-flex items-center justify-center gap-2 rounded-4xl border border-(--color-border) bg-neutral-900 px-2 py-1">
