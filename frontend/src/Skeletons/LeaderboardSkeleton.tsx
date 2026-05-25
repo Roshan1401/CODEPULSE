@@ -35,14 +35,14 @@ function LeaderboardSkeleton() {
                 <div className="col-span-4 flex items-center gap-3">
                   <div className="h-8 w-8 animate-pulse rounded-full bg-gray-300 md:h-11 md:w-11 dark:bg-neutral-700" />
                   <div className="flex flex-col gap-2">
-                    <div className="h-4 w-24 animate-pulse rounded bg-gray-300 dark:bg-neutral-700" />
+                    <div className="mx-2 h-4 w-15 animate-pulse rounded bg-gray-300 sm:w-20 md:mx-0 md:w-24 dark:bg-neutral-700" />
                     <div className="hidden h-3 w-20 animate-pulse rounded bg-gray-300 md:block dark:bg-neutral-700" />
                   </div>
                 </div>
 
                 {/* Time Spent */}
                 <div className="col-span-3 flex justify-center">
-                  <div className="h-4 w-16 animate-pulse rounded bg-gray-300 dark:bg-neutral-700" />
+                  <div className="h-4 w-10 animate-pulse rounded bg-gray-300 md:w-16 dark:bg-neutral-700" />
                 </div>
 
                 {/* Mobile Arrow */}
