@@ -5,4 +5,20 @@ interface UserActivityStats {
   timeSpent: number;
 }
 
-export type { range, UserActivityStats };
+interface PublicProfile {
+  profile: {
+    id: string;
+    name: string;
+    username: string;
+    bio: string | null;
+    avatar_url: string;
+  } | null;
+  socialLinks:
+    | {
+        platform: string;
+        url: string;
+      }[]
+    | null;
+}
+
+export type { range, UserActivityStats, PublicProfile };
