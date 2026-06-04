@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Country, State, City } from "country-state-city";
 import Select from "react-select";
 
@@ -57,7 +57,42 @@ const selectStyles = (hasError: boolean) => ({
     ...base,
     zIndex: 9999,
   }),
+  singleValue: (base: object) => ({
+    ...base,
+    color: "var(--color-text-primary)",
+  }),
+  input: (base: object) => ({
+    ...base,
+    color: "var(--color-text-primary)",
+  }),
 });
+
+function resolveCountry(value?: string): SelectedCountry | null {
+  if (!value?.trim()) return null;
+  const trimmed = value.trim();
+  const countries = Country.getAllCountries();
+  const byIso = countries.find((c) => c.isoCode === trimmed);
+  if (byIso) return { isoCode: byIso.isoCode, name: byIso.name };
+  const byName = countries.find(
+    (c) => c.name.toLowerCase() === trimmed.toLowerCase(),
+  );
+  return byName ? { isoCode: byName.isoCode, name: byName.name } : null;
+}
+
+function resolveState(
+  countryIso: string,
+  value?: string,
+): SelectedState | null {
+  if (!value?.trim()) return null;
+  const trimmed = value.trim();
+  const states = State.getStatesOfCountry(countryIso);
+  const byIso = states.find((s) => s.isoCode === trimmed);
+  if (byIso) return { isoCode: byIso.isoCode, name: byIso.name };
+  const byName = states.find(
+    (s) => s.name.toLowerCase() === trimmed.toLowerCase(),
+  );
+  return byName ? { isoCode: byName.isoCode, name: byName.name } : null;
+}
 
 export default function EditModal({
   isOpen,
@@ -66,26 +101,43 @@ export default function EditModal({
   onSave,
 }: EditModalProps) {
   const [page, setPage] = useState(1);
-  const [name, setName] = useState(initialData?.name ?? "");
-  const [username, setUsername] = useState(initialData?.username ?? "");
-  const [bio, setBio] = useState(initialData?.bio ?? "");
-  const [country, setCountry] = useState<SelectedCountry | null>(() => {
-    if(!initialData?.country) return null;
-    const found = Country.getAllCountries().find(c => c.isoCode === initialData?.country);
-    return found ? { isoCode: found.isoCode, name: found.name } : null;
-  });
-  const [state, setState] = useState<SelectedState | null>(() => {
-    if (!initialData?.state || !country) return null
-    const found = State.getStatesOfCountry(country.isoCode).find(
-      (s) => s.name === initialData.state
-    )
-    return found ? { isoCode: found.isoCode, name: found.name } : null
-  })
-  const [city, setCity] = useState<SelectedCity | null>(() => {
-    if (!initialData?.city) return null
-    return { name: initialData.city }
-  })
+  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
+  const [bio, setBio] = useState("");
+  const [country, setCountry] = useState<SelectedCountry | null>(null);
+  const [state, setState] = useState<SelectedState | null>(null);
+  const [city, setCity] = useState<SelectedCity | null>(null);
   const [errors, setErrors] = useState<Record<string, boolean>>({});
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    setPage(1);
+    setErrors({});
+    setName(initialData?.name ?? "");
+    setUsername(initialData?.username ?? "");
+    setBio(initialData?.bio ?? "");
+
+    const resolvedCountry = resolveCountry(initialData?.country);
+    const resolvedState = resolvedCountry
+      ? resolveState(resolvedCountry.isoCode, initialData?.state)
+      : null;
+    const resolvedCity = initialData?.city?.trim()
+      ? { name: initialData.city.trim() }
+      : null;
+
+    setCountry(resolvedCountry);
+    setState(resolvedState);
+    setCity(resolvedCity);
+  }, [
+    isOpen,
+    initialData?.name,
+    initialData?.username,
+    initialData?.bio,
+    initialData?.country,
+    initialData?.state,
+    initialData?.city,
+  ]);
 
   if (!isOpen) return null;
 
@@ -131,13 +183,19 @@ export default function EditModal({
       }))
     : [];
 
-  const cityOptions: SelectOption[] =
-    country && state
-      ? City.getCitiesOfState(country.isoCode, state.isoCode).map((c) => ({
-          label: c.name,
-          value: c.name,
-        }))
-      : [];
+  const cityOptions: SelectOption[] = (() => {
+    if (!country || !state) return [];
+    const options = City.getCitiesOfState(country.isoCode, state.isoCode).map(
+      (c) => ({
+        label: c.name,
+        value: c.name,
+      }),
+    );
+    if (city && !options.some((o) => o.value === city.name)) {
+      return [{ label: city.name, value: city.name }, ...options];
+    }
+    return options;
+  })();
 
   const inputClass = (hasError: boolean) =>
     `w-full rounded-md border bg-transparent p-2 focus:ring-2 focus:ring-orange-500 focus:outline-none dark:text-white sm:p-3 ${

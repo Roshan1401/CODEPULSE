@@ -11,8 +11,6 @@ function Profile() {
   const { username } = useParams();
   const { profile, loading } = usePublicProfile(username || "");
 
-  
-
   return (
     <div>
       {loading ? (
