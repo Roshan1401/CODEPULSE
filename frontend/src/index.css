@@ -33,3 +33,12 @@
     @apply animate-pulse bg-gray-300 dark:bg-neutral-700;
   }
 }
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
