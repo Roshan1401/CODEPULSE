@@ -27,8 +27,19 @@ interface PublicProfileStats {
   total_hours: number;
   total_languages: number;
   current_streak: number;
-  avg_hours : number;
+  avg_hours: number;
   language_breakdown: Record<string, number>;
 }
 
-export type { range, UserActivityStats, PublicProfile , PublicProfileStats };
+interface ChartProps {
+  languages: { language: string; hours: number }[];
+  getColor: (index: number) => string;
+}
+
+export type {
+  range,
+  UserActivityStats,
+  PublicProfile,
+  PublicProfileStats,
+  ChartProps,
+};

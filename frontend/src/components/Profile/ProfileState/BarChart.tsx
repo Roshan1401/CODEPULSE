@@ -1,11 +1,7 @@
 import { BarChart, Bar, Tooltip, ResponsiveContainer, Cell } from "recharts";
+import type { ChartProps } from "../../../types/types";
 
-interface BarChartProps {
-  languages: { language: string; hours: number }[];
-  getColor: (index: number) => string;
-}
-
-export default function BarChart2({ languages, getColor }: BarChartProps) {
+export default function BarChart2({ languages, getColor }: ChartProps) {
   return (
     <div className="flex h-70 w-60 items-center justify-center md:h-90 md:w-80 lg:h-70 lg:w-50 xl:h-90 xl:w-70">
       <ResponsiveContainer width="100%" height="100%">

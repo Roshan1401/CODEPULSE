@@ -1,15 +1,10 @@
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import type { ChartOptions } from "chart.js";
+import type { ChartProps } from "../../../types/types";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
-
-interface DonutChartProps {
-  languages: { language: string; hours: number }[];
-  getColor: (index: number) => string;
-}
-
-export default function DonutChart({ languages, getColor }: DonutChartProps) {
+export default function DonutChart({ languages, getColor }: ChartProps) {
   const data = {
     labels: languages.map((lang) => lang.language),
     datasets: [
