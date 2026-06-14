@@ -106,6 +106,8 @@ function ProfileHeader({ profileData }: ProfileHeaderProps) {
     name: string;
     username: string;
     bio: string;
+    avatar_url: string;
+    banner_url: string;
     country: string;
     state: string;
     city: string;
@@ -118,6 +120,10 @@ function ProfileHeader({ profileData }: ProfileHeaderProps) {
     if (data.username !== profile.username)
       updatedFields.username = data.username;
     if (data.bio !== profile.bio) updatedFields.bio = data.bio;
+    if (data.avatar_url !== profile.avatar_url)
+      updatedFields.avatar_url = data.avatar_url;
+    if (data.banner_url !== profile.banner_url)
+      updatedFields.banner_url = data.banner_url;
     if (data.country !== profile.country) updatedFields.country = data.country;
     if (data.state !== profile.state) updatedFields.state = data.state;
     if (data.city !== profile.city) updatedFields.city = data.city;
@@ -167,6 +173,8 @@ function ProfileHeader({ profileData }: ProfileHeaderProps) {
           country: profile?.country || "",
           state: profile?.state || "",
           city: profile?.city || "",
+          avatar_url: profile?.avatar_url || "",
+          banner_url: profile?.banner_url || "",
         }}
         onSave={handleOnSaveEdit}
       />
