@@ -152,6 +152,8 @@ function ProfileHeader({ profileData }: ProfileHeaderProps) {
     setIsEditModalOpen(false);
   };
 
+  console.log("Profile data:", profile?.avatar_url);
+
   return (
     <div>
       <SocialLinkModal
@@ -203,7 +205,7 @@ function ProfileHeader({ profileData }: ProfileHeaderProps) {
           <span className="text-md text-(--color-text-secondary) md:text-lg xl:text-xl">
             @{profile?.username || "adamBoka"}
           </span>
-          <span className="mt-1 text-lg text-(--color-text-secondary) md:mt-2 md:text-xl xl:text-2xl">
+          <span className="mt-1 text-lg text-(--color-text-secondary) md:mt-2 md:text-xl">
             {profile?.bio || "I am the first man on earth"}
           </span>
           <div className="mt-7 flex flex-col items-center gap-5 md:flex-row">
@@ -228,17 +230,23 @@ function ProfileHeader({ profileData }: ProfileHeaderProps) {
             </button>
           </div>
         </div>
-        <div className="absolute top-10 right-3 p-4 md:top-17 lg:top-18 lg:right-5 xl:top-28">
-          <button
-            onClick={() => setIsEditModalOpen(true)}
-            className="flex w-fit cursor-pointer items-center gap-3 rounded-xl border border-(--color-border-secondary) bg-orange-500 px-2 py-2 text-white shadow-2xl transition-all duration-100 hover:scale-105 md:rounded-lg md:px-4"
-          >
-            <Pencil className="h-4 w-4 xl:h-5 xl:w-5" />
-            <span className="hidden text-lg font-bold md:flex xl:text-xl">
-              Edit
-            </span>
-          </button>
-        </div>
+        {
+          isOwnProfile && (
+            <div className="absolute top-10 right-3 p-4 md:top-17 lg:top-18 lg:right-5 xl:top-28">
+              <button
+                onClick={() => setIsEditModalOpen(true)}
+                className="flex w-fit cursor-pointer items-center gap-3 rounded-xl border border-(--color-border-secondary) bg-orange-500 px-2 py-2 text-white shadow-2xl transition-all duration-100 hover:scale-105 md:rounded-lg md:px-4"
+              >
+                <Pencil className="h-4 w-4 xl:h-5 xl:w-5" />
+                <span className="hidden text-lg font-bold md:flex xl:text-xl">
+                  Edit
+                </span>
+              </button>
+            </div>
+          )
+
+        }
+
       </div>
     </div>
   );
