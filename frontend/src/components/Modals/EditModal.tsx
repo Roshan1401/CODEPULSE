@@ -9,7 +9,7 @@ import {
   X,
   ArrowRight,
 } from "lucide-react";
-import banner from "../../assets/banner.jpg";
+import { uploadToCloudinary } from "../../lib/cloudinary";
 
 interface SelectedCountry {
   isoCode: string;
@@ -59,10 +59,13 @@ interface FilePreview {
   file: File;
   preview: string;
 }
+
 interface SelectedFiles {
   avatar_url: FilePreview | null;
   banner_url: FilePreview | null;
 }
+
+const EMPTY_FILES: SelectedFiles = { avatar_url: null, banner_url: null };
 
 const countryOptions: SelectOption[] = Country.getAllCountries().map((c) => ({
   label: c.name,
@@ -129,16 +132,12 @@ const selectStyles = (hasError: boolean) => ({
   dropdownIndicator: (base: object) => ({
     ...base,
     color: "var(--color-text-secondary)",
-    "&:hover": {
-      color: "var(--color-text-primary)",
-    },
+    "&:hover": { color: "var(--color-text-primary)" },
   }),
   clearIndicator: (base: object) => ({
     ...base,
     color: "var(--color-text-secondary)",
-    "&:hover": {
-      color: "var(--color-text-primary)",
-    },
+    "&:hover": { color: "var(--color-text-primary)" },
   }),
 });
 
@@ -154,10 +153,7 @@ function resolveCountry(value?: string): SelectedCountry | null {
   return byName ? { isoCode: byName.isoCode, name: byName.name } : null;
 }
 
-function resolveState(
-  countryIso: string,
-  value?: string,
-): SelectedState | null {
+function resolveState(countryIso: string, value?: string): SelectedState | null {
   if (!value?.trim()) return null;
   const trimmed = value.trim();
   const states = State.getStatesOfCountry(countryIso);
@@ -179,42 +175,33 @@ export default function EditModal({
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [bio, setBio] = useState("");
-  const [avatar_url, setAvatarUrl] = useState<string>("");
-  const [banner_url, setBannerUrl] = useState<string>("");
+  const [avatar_url, setAvatarUrl] = useState("");
+  const [banner_url, setBannerUrl] = useState("");
   const [country, setCountry] = useState<SelectedCountry | null>(null);
   const [state, setState] = useState<SelectedState | null>(null);
   const [city, setCity] = useState<SelectedCity | null>(null);
   const [errors, setErrors] = useState<Record<string, boolean>>({});
+  const [saving, setSaving] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<SelectedFiles>(EMPTY_FILES);
 
-  const [selectedFile, setSelectedFile] = useState<SelectedFiles>({
-    avatar_url: null,
-    banner_url: null,
-  });
 
-  const handleFileChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    type: "avatar_url" | "banner_url",
-  ) => {
-    const file = event.target.files?.[0];
-
-    if (!file) return;
-
-    const preview = URL.createObjectURL(file);
-
-    setSelectedFile((prev) => ({
-      ...prev,
-      [type]: {
-        file,
-        preview,
-      },
-    }));
-  };
+  useEffect(() => {
+    return () => {
+      if (selectedFile.avatar_url?.preview)
+        URL.revokeObjectURL(selectedFile.avatar_url.preview);
+      if (selectedFile.banner_url?.preview)
+        URL.revokeObjectURL(selectedFile.banner_url.preview);
+    };
+  }, [selectedFile]);
 
   useEffect(() => {
     if (!isOpen) return;
 
     setPage(1);
     setErrors({});
+    setUploadError(null);
+    setSelectedFile(EMPTY_FILES);
     setName(initialData?.name ?? "");
     setUsername(initialData?.username ?? "");
     setBio(initialData?.bio ?? "");
@@ -261,42 +248,72 @@ export default function EditModal({
     if (validate({ name, username })) setPage(2);
   };
 
-  const handleSave = () => {
-    if (validate({ country, state, city }) && onSave) {
+  const handleFileChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    type: "avatar_url" | "banner_url",
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    const preview = URL.createObjectURL(file);
+    setSelectedFile((prev) => ({ ...prev, [type]: { file, preview } }));
+  };
+
+  const handleSave = async () => {
+    if (!validate({ country, state, city }) || !onSave) return;
+
+    setSaving(true);
+    setUploadError(null);
+
+    try {
+      const [finalAvatarUrl, finalBannerUrl] = await Promise.all([
+        selectedFile.avatar_url?.file
+          ? uploadToCloudinary(selectedFile.avatar_url.file, "avatars")
+          : Promise.resolve(avatar_url),
+        selectedFile.banner_url?.file
+          ? uploadToCloudinary(selectedFile.banner_url.file, "banners")
+          : Promise.resolve(banner_url),
+      ]);
+
       onSave({
         name,
         username,
         bio,
-        avatar_url: selectedFile.avatar_url?.preview || avatar_url,
-        banner_url: selectedFile.banner_url?.preview || banner_url,
+        avatar_url: finalAvatarUrl,
+        banner_url: finalBannerUrl,
         country: country?.name ?? "",
         state: state?.name ?? "",
         city: city?.name ?? "",
       });
+
       handleClose();
+    } catch (error) {
+      setUploadError(
+        error instanceof Error ? error.message : "Upload failed",
+      );
+    } finally {
+      setSaving(false);
     }
   };
 
   const handleClose = () => {
     setPage(1);
     setErrors({});
+    setUploadError(null);
+    setSelectedFile(EMPTY_FILES);
     onClose();
   };
 
   const stateOptions: SelectOption[] = country
     ? State.getStatesOfCountry(country.isoCode).map((s) => ({
-        label: s.name,
-        value: s.isoCode,
-      }))
+      label: s.name,
+      value: s.isoCode,
+    }))
     : [];
 
   const cityOptions: SelectOption[] = (() => {
     if (!country || !state) return [];
     const options = City.getCitiesOfState(country.isoCode, state.isoCode).map(
-      (c) => ({
-        label: c.name,
-        value: c.name,
-      }),
+      (c) => ({ label: c.name, value: c.name }),
     );
     if (city && !options.some((o) => o.value === city.name)) {
       return [{ label: city.name, value: city.name }, ...options];
@@ -305,14 +322,13 @@ export default function EditModal({
   })();
 
   const fieldClass = (hasError: boolean) =>
-    `flex items-start gap-3 rounded-lg border bg-(--color-bg-secondary) p-3 transition-colors focus-within:border-orange-500 focus-within:ring-1 focus-within:ring-orange-500 sm:p-4 ${
-      hasError ? "border-red-500" : "border-(--color-border)"
+    `flex items-start gap-3 rounded-lg border bg-(--color-bg-secondary) p-3 transition-colors focus-within:border-orange-500 focus-within:ring-1 focus-within:ring-orange-500 sm:p-4 ${hasError ? "border-red-500" : "border-(--color-border)"
     }`;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="w-full max-w-sm overflow-y-auto rounded-2xl border border-(--color-border) bg-(--color-bg-primary) p-4 sm:max-w-md sm:p-6 md:max-w-lg md:p-8 lg:max-w-xl">
-        {/* ── Header ── */}
+      <div className="max-h-[90vh] w-full max-w-sm overflow-y-auto rounded-2xl border border-(--color-border) bg-(--color-bg-primary) p-4 sm:max-w-md sm:p-6 md:max-w-lg md:p-8 lg:max-w-xl">
+
         <div className="mb-5 flex items-start justify-between sm:mb-6">
           <div>
             <h2 className="text-xl font-semibold text-(--color-text-primary) md:text-2xl">
@@ -324,17 +340,18 @@ export default function EditModal({
           </div>
           <button
             onClick={handleClose}
-            className="cursor-pointer rounded-full bg-(--color-bg-secondary) p-2 text-(--color-text-secondary) hover:text-(--color-text-primary)"
+            disabled={saving}
+            className="cursor-pointer rounded-full bg-(--color-bg-secondary) p-2 text-(--color-text-secondary) hover:text-(--color-text-primary) disabled:opacity-50"
             aria-label="Close"
           >
             <X className="h-4 w-4 sm:h-5 sm:w-5" />
           </button>
         </div>
 
-        {/* ── Page 1 ── */}
         {page === 1 && (
           <div className="min-h-70 space-y-4 sm:min-h-85">
             <div className="relative mb-16 sm:mb-20">
+
               <div className="relative h-45 w-full overflow-hidden rounded-xl border border-(--color-border)">
                 <img
                   src={selectedFile.banner_url?.preview || banner_url}
@@ -345,6 +362,7 @@ export default function EditModal({
                   <div className="rounded-full bg-[rgba(67,67,67,0.7)] p-2 hover:bg-white hover:text-black">
                     <Camera className="h-5 w-5" />
                   </div>
+                  <span className="text-sm font-medium">Change cover</span> {/* ✅ added */}
                   <input
                     type="file"
                     hidden
@@ -374,7 +392,6 @@ export default function EditModal({
               </div>
             </div>
 
-            {/* Name */}
             <div>
               <div className={fieldClass(errors.name)}>
                 <User className="mt-0.5 h-5 w-5 shrink-0 text-(--color-text-secondary)" />
@@ -399,7 +416,6 @@ export default function EditModal({
               )}
             </div>
 
-            {/* Username */}
             <div>
               <div className={fieldClass(errors.username)}>
                 <AtSign className="mt-0.5 h-5 w-5 shrink-0 text-(--color-text-secondary)" />
@@ -420,13 +436,10 @@ export default function EditModal({
                 </div>
               </div>
               {errors.username && (
-                <p className="mt-1 text-sm text-red-500">
-                  Username is required
-                </p>
+                <p className="mt-1 text-sm text-red-500">Username is required</p>
               )}
             </div>
 
-            {/* Bio */}
             <div>
               <div className={`h-22 ${fieldClass(errors.bio)}`}>
                 <MessageSquareQuote className="mt-0.5 h-5 w-5 shrink-0 text-(--color-text-secondary)" />
@@ -449,7 +462,6 @@ export default function EditModal({
           </div>
         )}
 
-        {/* ── Page 2 ── */}
         {page === 2 && (
           <div className="min-h-70 space-y-3 sm:min-h-85 sm:space-y-4">
             <div>
@@ -458,15 +470,9 @@ export default function EditModal({
               </label>
               <Select
                 options={countryOptions}
-                value={
-                  country
-                    ? { label: country.name, value: country.isoCode }
-                    : null
-                }
+                value={country ? { label: country.name, value: country.isoCode } : null}
                 onChange={(opt) => {
-                  setCountry(
-                    opt ? { isoCode: opt.value, name: opt.label } : null,
-                  );
+                  setCountry(opt ? { isoCode: opt.value, name: opt.label } : null);
                   setState(null);
                   setCity(null);
                   if (errors.country) clearError("country");
@@ -488,13 +494,9 @@ export default function EditModal({
               </label>
               <Select
                 options={stateOptions}
-                value={
-                  state ? { label: state.name, value: state.isoCode } : null
-                }
+                value={state ? { label: state.name, value: state.isoCode } : null}
                 onChange={(opt) => {
-                  setState(
-                    opt ? { isoCode: opt.value, name: opt.label } : null,
-                  );
+                  setState(opt ? { isoCode: opt.value, name: opt.label } : null);
                   setCity(null);
                   if (errors.state) clearError("state");
                 }}
@@ -535,25 +537,39 @@ export default function EditModal({
           </div>
         )}
 
+        {uploadError && (
+          <p className="mt-3 text-center text-sm text-red-500">{uploadError}</p>
+        )}
+
         {/* ── Footer ── */}
         <div className="mt-5 flex gap-2 sm:mt-6 sm:gap-3">
           {page === 2 && (
             <button
-              onClick={() => {
-                setErrors({});
-                setPage(1);
-              }}
-              className="flex-1 cursor-pointer rounded-lg border border-(--color-border) px-3 py-3 text-sm font-medium text-(--color-text-primary) transition-colors hover:bg-(--color-bg-secondary) sm:px-4 md:text-base"
+              onClick={() => { setErrors({}); setPage(1); }}
+              disabled={saving}
+              className="flex-1 cursor-pointer rounded-lg border border-(--color-border) px-3 py-3 text-sm font-medium text-(--color-text-primary) transition-colors hover:bg-(--color-bg-secondary) disabled:opacity-50 sm:px-4 md:text-base"
             >
               Previous
             </button>
           )}
           <button
             onClick={page === 1 ? handleNext : handleSave}
-            className="flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-lg bg-orange-500 px-3 py-3 text-sm font-semibold text-white transition-colors hover:bg-orange-600 sm:px-4 md:text-base"
+            disabled={saving}  // ✅ disabled during upload
+            className="flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-lg bg-orange-500 px-3 py-3 text-sm font-semibold text-white transition-colors hover:bg-orange-600 disabled:cursor-not-allowed disabled:opacity-50 sm:px-4 md:text-base"
           >
-            {page === 1 ? "Next" : "Save"}
-            {page === 1 && <ArrowRight className="h-4 w-4" />}
+            {saving ? (
+              <>
+                <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                </svg>
+                Uploading...
+              </>
+            ) : page === 1 ? (
+              <><span>Next</span><ArrowRight className="h-4 w-4" /></>
+            ) : (
+              "Save"
+            )}
           </button>
         </div>
       </div>
