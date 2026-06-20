@@ -59,6 +59,23 @@ interface SelectOption {
   value: string;
 }
 
+type FieldKey = "country" | "state" | "city";
+type Mode = "global" | "region";
+type Period = "24h" | "7d" | "30d" | "allTime";
+
+interface RankUser {
+  id: string;
+  rank: number;
+  name: string;
+  username: string;
+  avatar_url: string;
+  hours: number;
+  streak_days: number;
+  country: string;
+  state: string;
+  city: string;
+}
+
 export type {
   Range,
   UserActivityStats,
@@ -69,4 +86,8 @@ export type {
   ProfileRPC,
   Tab,
   SelectOption,
+  FieldKey,
+  Mode,
+  Period,
+  RankUser,
 };
