@@ -9,53 +9,64 @@ interface InitialLocation {
 }
 
 export function useLocationFilter(initial?: InitialLocation) {
-  const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
-  const [selectedState, setSelectedState] = useState<string | null>(null);
-  const [selectedCity, setSelectedCity] = useState<string | null>(null);
+  const [selectedCountry, setSelectedCountry] = useState<string | "all">("all");
+  const [selectedState, setSelectedState] = useState<string | "all">("all");
+  const [selectedCity, setSelectedCity] = useState<string | "all">("all");
+
+  const countries = useMemo(() => Country.getAllCountries(), []);
 
   const countryOptions: SelectOption[] = useMemo(
     () =>
-      Country.getAllCountries().map((c) => ({
+      countries.map((c) => ({
         label: c.name,
-        value: c.isoCode,
+        value: c.name,
       })),
-    [],
+    [countries],
   );
+
+  const countryIso = useMemo(() => {
+    if (!selectedCountry) return undefined;
+    return countries.find((c) => c.name === selectedCountry)?.isoCode;
+  }, [selectedCountry]);
+
+  const stateIso = useMemo(() => {
+    if (!countryIso || !selectedState || selectedState === "all")
+      return undefined;
+    return State.getStatesOfCountry(countryIso).find(
+      (s) => s.name === selectedState,
+    )?.isoCode;
+  }, [selectedState, countryIso]);
 
   const stateOptions: SelectOption[] = useMemo(
     () =>
-      selectedCountry
+      countryIso
         ? [
             { label: "All states", value: "all" },
-            ...State.getStatesOfCountry(selectedCountry).map((s) => ({
+            ...State.getStatesOfCountry(countryIso).map((s) => ({
               label: s.name,
-              value: s.isoCode,
+              value: s.name,
             })),
           ]
         : [],
-    [selectedCountry],
+    [countryIso],
   );
 
   const cityOptions: SelectOption[] = useMemo(
     () =>
-      selectedCountry && selectedState
+      countryIso && stateIso
         ? [
             { label: "All cities", value: "all" },
-            ...City.getCitiesOfState(selectedCountry, selectedState).map(
-              (c) => ({
-                label: c.name,
-                value: c.name,
-              }),
-            ),
+            ...City.getCitiesOfState(countryIso, stateIso).map((c) => ({
+              label: c.name,
+              value: c.name,
+            })),
           ]
         : [],
-    [selectedCountry, selectedState],
+    [countryIso, stateIso],
   );
 
   useEffect(() => {
     if (!initial?.country) return;
-
-    const countries = Country.getAllCountries();
 
     const matchedCountry =
       countries.find((c) => c.isoCode === initial.country) ??
@@ -64,7 +75,7 @@ export function useLocationFilter(initial?: InitialLocation) {
       );
 
     if (!matchedCountry) return;
-    setSelectedCountry(matchedCountry.isoCode);
+    setSelectedCountry(matchedCountry.name);
 
     if (initial.state) {
       const states = State.getStatesOfCountry(matchedCountry.isoCode);
@@ -75,7 +86,7 @@ export function useLocationFilter(initial?: InitialLocation) {
         );
 
       if (matchedState) {
-        setSelectedState(matchedState.isoCode);
+        setSelectedState(matchedState.name);
         if (initial.city) {
           setSelectedCity(initial.city);
         }
@@ -83,15 +94,15 @@ export function useLocationFilter(initial?: InitialLocation) {
     }
   }, [initial?.country, initial?.state, initial?.city]);
 
-  const handleCountryChange = (value: string | null) => {
-    setSelectedCity(value);
-    setSelectedState(null);
-    setSelectedCity(null);
+  const handleCountryChange = (value: string | "all") => {
+    setSelectedCountry(value);
+    setSelectedState("all");
+    setSelectedCity("all");
   };
 
-  const handleStateChange = (value: string | null) => {
+  const handleStateChange = (value: string | "all") => {
     setSelectedState(value);
-    setSelectedCity(null);
+    setSelectedCity("all");
   };
 
   return {
