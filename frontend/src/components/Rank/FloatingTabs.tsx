@@ -7,33 +7,31 @@ type Tab = {
 };
 
 type FloatingTabsProps = {
+  value: string;
   tabs: Tab[];
-  defaultValue?: string;
   onChange?: (value: string) => void;
   className?: string;
 };
 
 export function FloatingTabs({
   tabs,
-  defaultValue,
+  value,
   onChange,
   className = "",
 }: FloatingTabsProps) {
-  const [activeTab, setActiveTab] = useState(defaultValue || tabs[0]?.value);
-
   const [indicatorStyle, setIndicatorStyle] = useState<React.CSSProperties>({});
 
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   useLayoutEffect(() => {
     updateIndicator();
-  }, [activeTab]);
+  }, [value]);
 
   const updateIndicator = () => {
     if (containerRef.current) {
       const activeButton =
         containerRef.current.querySelector<HTMLButtonElement>(
-          `[data-value="${activeTab}"]`,
+          `[data-value="${value}"]`,
         );
 
       if (activeButton) {
@@ -49,7 +47,6 @@ export function FloatingTabs({
   };
 
   const handleTabChange = (value: string) => {
-    setActiveTab(value);
     onChange?.(value);
   };
 
@@ -70,7 +67,7 @@ export function FloatingTabs({
             data-value={tab.value}
             onClick={() => handleTabChange(tab.value)}
             className={`relative z-10 flex cursor-pointer items-center justify-center gap-2 rounded-md px-3.5 py-1.5 text-sm font-medium transition-colors duration-200 ${
-              activeTab === tab.value
+              value === tab.value
                 ? "text-white"
                 : "text-zinc-400 hover:text-zinc-500"
             }`}

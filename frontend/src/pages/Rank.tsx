@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { FloatingTabs } from "../components/Rank/FloatingTabs";
 import { Globe, MapPin } from "lucide-react";
 import image from "../assets/image.png";
@@ -7,19 +7,34 @@ import { GlobalFilters } from "../components/Rank/GlobalFilters";
 import { RegionFilters } from "../components/Rank/RegionFilters";
 import { useLocationFilter } from "../hooks/useLocationFilter";
 import useProfileStore from "../store/useProfileStore";
-import type { FieldKey, Mode, Period, RankUser } from "../types/types";
+import type { FieldKey, Mode, Period } from "../types/types";
 import { useRankings } from "../hooks/useRankings";
 import { RankSkeleton } from "../Skeletons/RankSkeleton";
 import { RankUser as RankUserComponent } from "../components/Rank/RankUser";
 
 function Rank() {
-  const [mode, setMode] = useState<Mode>("global");
-  const [period, setPeriod] = useState<Period>("allTime");
+  const [mode, setMode] = useState<Mode>(() => {
+    const saved = localStorage.getItem("rankMode") as Mode;
+    return saved || "global";
+  });
+  const [period, setPeriod] = useState<Period>(() => {
+    const saved = localStorage.getItem("rankPeriod") as Period;
+    return saved || "allTime";
+  });
   const [selectedGlobalCountry, setSelectedGlobalCountry] =
     useState<string>("all");
-  const [activeField, setActiveField] = useState<FieldKey>("country");
+  const [activeField, setActiveField] = useState<FieldKey>(() => {
+    const saved = localStorage.getItem("rankActiveField") as FieldKey;
+    return saved || "country";
+  });
 
   const { profile } = useProfileStore();
+
+  useEffect(() => {
+    localStorage.setItem("rankMode", mode);
+    localStorage.setItem("rankPeriod", period);
+    localStorage.setItem("rankActiveField", activeField);
+  }, [mode, period, activeField]);
 
   const {
     selectedCountry,
@@ -51,6 +66,21 @@ function Rank() {
     return { country: selectedCountry, state: null, city: null };
   }, [activeField, selectedCountry, selectedState, selectedCity]);
 
+  const rankingFilters = useMemo(() => {
+    if (mode === "global") {
+      return {
+        country: selectedGlobalCountry,
+        state: null,
+        city: null,
+      };
+    }
+    return {
+      country: regionFetchFilters.country,
+      state: regionFetchFilters.state,
+      city: regionFetchFilters.city,
+    };
+  }, [mode, selectedGlobalCountry, regionFetchFilters]);
+
   const {
     data: rankings,
     loading,
@@ -58,10 +88,7 @@ function Rank() {
   } = useRankings({
     mode,
     period,
-    country:
-      mode === "global" ? selectedGlobalCountry : regionFetchFilters.country,
-    state: mode === "region" ? regionFetchFilters.state : null,
-    city: mode === "region" ? regionFetchFilters.city : null,
+    ...rankingFilters,
   });
 
   return (
@@ -78,12 +105,12 @@ function Rank() {
 
         <div className="flex items-center gap-4">
           <FloatingTabs
+            value={mode}
             tabs={[
               { value: "global", label: "Global", icon: <Globe /> },
               { value: "region", label: "Region", icon: <MapPin /> },
             ]}
             onChange={(value) => setMode(value as Mode)}
-            defaultValue="global"
           />
           <PeriodSelect value={period} onChange={setPeriod} />
         </div>
