@@ -5,7 +5,7 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { GithubIcon } from "../../assets/Icons";
 import type { RankUser } from "../../types/types";
 import type { Mode } from "../../types/types";
-import { CountryFlag } from "../../utils/countryFlag";
+import { CountryFlag } from "../../utils/CountryFlag";
 interface RankUserProps {
   user: RankUser;
   mode: Mode;
@@ -16,7 +16,7 @@ export function RankUser({ user, mode, isAllCountries }: RankUserProps) {
   const [openDropdown, setOpenDropdown] = useState(false);
 
   return (
-    <div className="mx-2 my-3 rounded-xl border border-(--color-border) bg-(--color-bg-secondary) md:m-0 md:rounded-none md:border-0 md:border-t">
+    <div className="mx-2 my-3 rounded-xl border border-(--color-border) md:m-0 md:rounded-none md:border-0 md:border-t">
       <div className="flex cursor-pointer items-center gap-2 border-(--color-border) p-3 transition-colors hover:bg-(--color-bg-secondary) sm:px-3.5 sm:py-4 md:grid md:grid-cols-12 md:gap-4 md:px-8 md:py-6 lg:px-4 lg:py-8 xl:px-8">
         <div className="col-span-1 flex shrink-0">
           <span
@@ -79,10 +79,10 @@ export function RankUser({ user, mode, isAllCountries }: RankUserProps) {
           </div>
 
           <div
-            className={`shrink-0 font-mono text-xs font-medium sm:text-sm md:col-span-2 md:text-center md:text-lg md:font-medium ${
+            className={`shrink-0 font-mono text-xs font-medium tracking-wide sm:text-sm md:col-span-2 md:text-center md:text-base md:font-semibold ${
               user.rank === 1
                 ? "text-orange-500 md:rounded-lg md:bg-orange-500/10 md:py-1"
-                : "text-(--color-text-primary) md:rounded-lg md:bg-neutral-100 md:py-1 dark:md:bg-neutral-900/50"
+                : "text-(--color-text-primary) md:rounded-lg md:py-1"
             }`}
           >
             {user.hours}h

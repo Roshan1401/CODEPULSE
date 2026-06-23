@@ -23,7 +23,7 @@ function UserRow({
   return (
     <div className="mx-2 my-3 rounded-xl border border-(--color-border) md:m-0 md:rounded-none md:border-0 md:border-t">
       <div
-        className={`flex cursor-pointer items-center gap-2 rounded-xl border-(--color-border) p-3 transition-colors sm:px-3.5 sm:py-4 md:grid md:grid-cols-12 md:gap-4 md:rounded-none md:px-8 md:py-6 lg:px-4 lg:py-4 xl:px-8 ${isCurrentUser ? "bg-orange-400/10" : "hover:bg-(--color-bg-secondary)"}`}
+        className={`flex cursor-pointer items-center gap-2 rounded-xl border-(--color-border) p-3 transition-colors sm:px-3.5 sm:py-4 md:grid md:grid-cols-12 md:gap-4 md:rounded-none md:px-8 md:py-6 lg:px-4 lg:py-5 xl:px-8 ${isCurrentUser ? "bg-orange-400/10" : "hover:bg-(--color-bg-secondary)"}`}
       >
         <div className="col-span-1 flex shrink-0">
           <span
@@ -117,7 +117,7 @@ function UserRow({
           {user.byLanguage.slice(0, 3).map((lang, i) => (
             <div className="group relative flex" key={i}>
               <span
-                className="flex h-9 w-9 items-center justify-center rounded-md p-1.5 text-2xl font-medium transition-all duration-200 group-hover:scale-110"
+                className="flex h-10 w-9 items-center justify-center rounded-md p-1.5 text-2xl font-medium transition-all duration-200 group-hover:scale-110"
                 style={{
                   backgroundColor: `${getLanguageColor(lang.language)}20`,
                   color: getLanguageColor(lang.language),
@@ -126,7 +126,7 @@ function UserRow({
               >
                 {getLanguageIcon(lang.language)}
               </span>
-              <span className="absolute -mt-10 hidden rounded-md bg-(--color-bg-primary) px-2 py-1 text-xs font-medium text-(--color-text-primary) shadow-lg group-hover:block">
+              <span className="absolute top-12 right-0 z-9999 hidden rounded-md bg-(--color-bg-primary) px-2 py-1 text-xs font-medium text-(--color-text-primary) shadow-lg group-hover:block">
                 {lang.language}
               </span>
             </div>
