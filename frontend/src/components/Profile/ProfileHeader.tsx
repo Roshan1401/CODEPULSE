@@ -5,10 +5,11 @@ import {
   type SocialLink,
 } from "../Modals/SocialLinkModal";
 import EditModal from "../Modals/EditModal";
-import { Pencil, Plus } from "lucide-react";
+import { Pencil, Plus, MapPin, Calendar } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import type { PublicProfile } from "../../types/types";
 import useProfileStore from "../../store/useProfileStore";
+import { GithubIcon } from "../../assets/Icons";
 
 interface ProfileHeaderProps {
   profileData: PublicProfile | null;
@@ -202,11 +203,36 @@ function ProfileHeader({ profileData }: ProfileHeaderProps) {
           <span className="text-md text-(--color-text-secondary) md:text-lg xl:text-xl">
             @{profile?.username || "adamBoka"}
           </span>
-          <span className="mt-1 text-lg text-(--color-text-secondary) md:mt-2 md:text-xl">
+          <span className="mt-1 text-lg text-neutral-200">
             {profile?.bio || "I am the first man on earth"}
           </span>
-          <div className="mt-7 flex flex-col items-center gap-5 md:flex-row">
+          <div className="flex gap-5">
+            <div className="mt-2 flex w-fit items-center gap-1 text-(--color-text-secondary) md:mt-3">
+              <MapPin className="h-4 w-4 text-(--color-text-secondary) md:h-5 md:w-5" />
+              <span className="text-md ml-1 flex items-center text-center text-(--color-text-secondary) md:text-lg">
+                {profile?.city && profile?.state && profile?.country
+                  ? `${profile.city}, ${profile.state}, ${profile.country}`
+                  : "Location not set"}
+              </span>
+            </div>
+            <div className="mt-2 flex w-fit items-center gap-1 text-(--color-text-secondary) md:mt-3">
+              <Calendar className="h-4 w-4 text-(--color-text-secondary) md:h-5 md:w-5" />
+              <span className="text-md ml-1 flex items-center text-center text-(--color-text-secondary) md:text-lg">
+                Joined October 2023
+              </span>
+            </div>
+          </div>
+
+          <div className="mt-5 flex flex-col items-center gap-5 md:flex-row">
             <div className="grid grid-cols-3 gap-2 md:flex">
+              {socialLinks.length === 0 && (
+                <div className="flex w-fit items-center gap-3 rounded-lg border border-(--color-border) bg-(--color-bg-secondary) px-3 py-1.5">
+                  <GithubIcon className="h-5 w-5 text-(--color-text-secondary)" />
+                  <span className="text-sm font-medium text-(--color-text-secondary)">
+                    Github
+                  </span>
+                </div>
+              )}
               {socialLinks.map((link) => (
                 <SocialLinkButton
                   key={link.platform}
@@ -216,15 +242,17 @@ function ProfileHeader({ profileData }: ProfileHeaderProps) {
                 />
               ))}
             </div>
-            <button
-              onClick={() => setIsModalOpen(true)}
-              className="flex w-full cursor-pointer flex-row items-center justify-center gap-2 rounded-lg border border-(--color-border-secondary) px-2 py-2 text-center text-3xl transition-all duration-100 hover:scale-115 hover:border-orange-400 md:w-fit md:rounded-full"
-            >
-              <Plus className="h-5 w-5 text-(--color-text-primary) md:h-6 md:w-6" />
-              <span className="flex text-sm font-semibold text-(--color-text-primary) md:hidden">
-                Add Link
-              </span>
-            </button>
+            {isOwnProfile && (
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="flex w-full cursor-pointer flex-row items-center justify-center gap-2 rounded-lg border border-(--color-border-secondary) px-2 py-2 text-center text-3xl transition-all duration-100 hover:scale-115 hover:border-orange-400 md:w-fit md:rounded-full"
+              >
+                <Plus className="h-5 w-5 text-(--color-text-primary) md:h-6 md:w-6" />
+                <span className="flex text-sm font-semibold text-(--color-text-primary) md:hidden">
+                  Add Link
+                </span>
+              </button>
+            )}
           </div>
         </div>
         {isOwnProfile && (
